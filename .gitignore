@@ -3,3 +3,5 @@ data/metadata_dataframe.pkl
 data/articles_dataframe.pkl
 data/metadata_articles_dataframe.pkl
 data/train.zip
+.idea/
+.vscode/
