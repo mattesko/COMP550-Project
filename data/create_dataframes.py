@@ -5,7 +5,6 @@
 import os
 import re
 from zipfile import ZipFile 
-import re
 import argparse
 
 import pandas as pd
@@ -38,20 +37,22 @@ def create_metadata_articles_df(zip_file, metadata_df):
     """Creates pandas.DataFrame by deep copying metadata dataframe and concatenating claims' related article content into a new column."""
     metadata_article_df = metadata_df.copy()
     metadata_article_df.article_content = ''
+
     for index, row in tqdm(metadata_article_df.iterrows(), desc='Creating metadata article df', total=len(metadata_df)):
-
-        contents = []
-        for article_id in row.related_articles:
-            filepath = f'train_articles/{article_id}.txt'
-            
-            with zip_file.open(filepath) as f:
-                content = f.read()
-                decoded_content = content.decode('utf-8')
-                contents.append(decoded_content)
-
+        contents = get_related_articles_content(row.related_articles)
         metadata_article_df.loc[index, 'article_content'] = ' '.join(contents)
 
     return metadata_article_df
+
+
+def get_related_articles_content(related_articles):
+    """Gets all related articles content by reading each related article"""
+    contents = []
+    for article_id in related_articles:
+        filepath = f'train_articles/{article_id}.txt'
+        content = read_article_content(zip_file, filepath)
+        contents.append(content)
+    return contents
     
 
 def create_metadata_df(metadata_filepath):
