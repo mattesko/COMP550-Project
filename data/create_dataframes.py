@@ -71,11 +71,18 @@ if __name__ == '__main__':
     METADATA_FILENAME = 'train.json'
     METADATA_FILEPATH = os.path.join(PROJECT_DIR, 'train.json')
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--create-articles', action='store_true')
+    parser.set_defaults(create_all=False)
+    args = parser.parse_args()
+    create_articles = args.create_articles
+
     zip_file = ZipFile(DATA_FILEPATH, 'r')
 
-    article_df = create_articles_df(zip_file)
-    path_to_save = os.path.join(PROJECT_DIR, 'articles_dataframe.pkl')
-    article_df.to_pickle(path_to_save)
+    if create_articles:
+        article_df = create_articles_df(zip_file)
+        path_to_save = os.path.join(PROJECT_DIR, 'articles_dataframe.pkl')
+        article_df.to_pickle(path_to_save)
 
     metadata_df = create_metadata_df(METADATA_FILEPATH)
     path_to_save = os.path.join(PROJECT_DIR, 'metadata_dataframe.pkl')
@@ -86,3 +93,4 @@ if __name__ == '__main__':
     metadata_articles_df.to_pickle(path_to_save)
 
     zip_file.close()
+    print('Success, Dataframes created!')
