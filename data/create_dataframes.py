@@ -39,13 +39,13 @@ def create_metadata_articles_df(zip_file, metadata_df):
     metadata_article_df.article_content = ''
 
     for index, row in tqdm(metadata_article_df.iterrows(), desc='Creating metadata article df', total=len(metadata_df)):
-        contents = get_related_articles_content(row.related_articles)
+        contents = get_related_articles_content(zip_file, row.related_articles)
         metadata_article_df.loc[index, 'article_content'] = ' '.join(contents)
 
     return metadata_article_df
 
 
-def get_related_articles_content(related_articles):
+def get_related_articles_content(zip_file, related_articles):
     """Gets all related articles content by reading each related article"""
     contents = []
     for article_id in related_articles:
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     metadata_df.to_pickle(path_to_save)
 
     metadata_articles_df = create_metadata_articles_df(zip_file, metadata_df)
-    path_to_save = os.path.join(PROJECT_DIR, 'metadata_article_dataframe.pkl')
+    path_to_save = os.path.join(PROJECT_DIR, 'metadata_articles_dataframe.pkl')
     metadata_articles_df.to_pickle(path_to_save)
 
     zip_file.close()
