@@ -141,12 +141,12 @@ def create_dataframe_for_training(data):
     """Creates a dataframe for training by concatenating claimant, claim and article content and
     copying labels to a new dataframe"""
     feature_column_name = 'X'
-    data_cp = data[['label']].copy()
+    #data_cp = data[['label']].copy()
     for i, row in tqdm(data.iterrows(), total=len(data)):
         all_features = f'{row.claimant} {row.claim} {row.article_content}'
-        data_cp.loc[i, feature_column_name] = all_features
+        data.loc[i, feature_column_name] = all_features
 
-    return data_cp
+    return data[feature_column_name]
 
 
 if __name__ == '__main__':
