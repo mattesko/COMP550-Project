@@ -8,6 +8,7 @@ from zipfile import ZipFile
 import argparse
 
 import pandas as pd
+import numpy as np
 from tqdm import tqdm
 
 
@@ -62,6 +63,22 @@ def create_metadata_df(metadata_filepath):
     return metadata_df
 
 
+def create_fold(metadata_df, train_ratio=0.7, valid_ratio=0.15, test_ratio=0.15):
+    """Add a column fold to metadata df"""
+    n_rows = metadata_df.shape[0]
+    np.random.seed(123)
+    indices = np.random.permutation(n_rows)
+    train_indices, dev_indices = np.ceil(train_ratio * n_rows).astype(int), np.ceil((1 - test_ratio) * n_rows).astype(
+        int)
+    training_idx, dev_idx, test_idx = indices[:train_indices], indices[train_indices:dev_indices], indices[
+                                                                                                   dev_indices:n_rows]
+    metadata_df["fold"] = "train"
+    metadata_df.loc[dev_idx, "fold"] = "development"
+    metadata_df.loc[test_idx, "fold"] = "test"
+
+    return metadata_df
+
+
 if __name__ == '__main__':
     PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -82,14 +99,16 @@ if __name__ == '__main__':
     if create_articles:
         article_df = create_articles_df(zip_file)
         path_to_save = os.path.join(PROJECT_DIR, 'articles_dataframe.pkl')
-        article_df.to_pickle(path_to_save)
+        article_df.reset_index().to_pickle(path_to_save)
 
     metadata_df = create_metadata_df(METADATA_FILEPATH)
     path_to_save = os.path.join(PROJECT_DIR, 'metadata_dataframe.pkl')
+    metadata_df = create_fold(metadata_df.reset_index())
     metadata_df.to_pickle(path_to_save)
 
     metadata_articles_df = create_metadata_articles_df(zip_file, metadata_df)
     path_to_save = os.path.join(PROJECT_DIR, 'metadata_articles_dataframe.pkl')
+    metadata_articles_df = create_fold(metadata_articles_df.reset_index())
     metadata_articles_df.to_pickle(path_to_save)
 
     zip_file.close()
