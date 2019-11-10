@@ -13,22 +13,23 @@ from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 
 
-def preprocess(data_df):
+def preprocess(data_df, remove_stopwords=False):
     """Create a dataframe whose contents are cleaned, stemmed, and lemmatized"""
     data_cp = data_df.copy()
     for i, row in tqdm(data_cp.iterrows(), total=len(data_cp), desc='Preprocessing dataframe contents'):
 
-        article_content = _clean(row.article_content)
+        article_content = _clean(row.article_content, remove_stopwords)
         row.article_content = _tokenize_stem_lem_join(article_content)
-        row.claimant = _tokenize_stem_lem_join(row.claimant)
-        row.claim = _tokenize_stem_lem_join(row.claim)
+
+        _clean_claim = _clean(row.claim, remove_stopwords)
+        row.claim = _tokenize_stem_lem_join(_clean_claim)
 
         data_cp.loc[i] = row
 
     return data_cp
 
 
-def _clean(text):
+def _clean(text, remove_stopwords=False):
     """Cleans text with an aggregate of cleaning methods"""
     text = _remove_between_square_brackets(text)
     text = _replace_contractions(text)
@@ -38,7 +39,9 @@ def _clean(text):
     words = _to_lowercase(words)
     words = _remove_punctuation(words)
     words = _replace_numbers(words)
-    # words = remove_stopwords(words)
+
+    if remove_stopwords:
+        words = _remove_stopwords(words)
 
     return ' '.join(words)
 
