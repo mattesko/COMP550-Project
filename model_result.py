@@ -28,7 +28,7 @@ for model_name in model_names:
     predictions.append(loaded_pred)
 
     print("==========> Confusion matrix for model: " + model_name)
-    print(confusion_matrix(y_test[:19], loaded_pred))
+    print(confusion_matrix(y_test, loaded_pred))
     print("==========> By class F1 score for model: " + model_name)
     print(f1_score(y_test, loaded_pred, average=None))
     print("==========> Micro avg F1 score for model: " + model_name)
