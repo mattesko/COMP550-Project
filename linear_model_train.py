@@ -36,7 +36,7 @@ if __name__ == '__main__':
     DATA_FILEPATH = os.path.join(DATA_DIR, 'metadata_articles_dataframe.pkl')
 
     data = pd.read_pickle(DATA_FILEPATH)
-    data = data[:100]
+    #data = data[:100]
 
     X_train, y_train = data[data["fold"]=="train"].drop(columns="label"), data[data["fold"]=="train"]["label"]
     X_dev, y_dev = data[data["fold"]=="development"].drop(columns="label"), data[data["fold"]=="development"]["label"]
