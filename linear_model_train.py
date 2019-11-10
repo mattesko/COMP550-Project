@@ -22,10 +22,10 @@ simplefilter(action='ignore', category=FutureWarning)
 seed = 123
 np.random.seed(seed)
 
-PREPROCESSING = False
-REMOVE_STOP_WORDS = False
-THRESHOLD_INFREQUENT_WORDS = 0.05
-MODEL_NAMES = ["logistic_reg_raw", "SVM_raw", "NB_raw"]
+PREPROCESSING = True
+REMOVE_STOP_WORDS = True
+THRESHOLD_INFREQUENT_WORDS = 0.01
+MODEL_NAMES = ["logistic_reg_preprocess", "SVM_preprocess", "NB_preprocess"]
 
 if __name__ == '__main__':
 
