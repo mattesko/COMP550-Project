@@ -33,10 +33,7 @@ def to_tdidf(pickle_path="tdidf_list.pkl"):
 def fc(denselist, data):
     clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(50), random_state=1)
     clf.fit(denselist[0:1500], data['label'][0:1500])
-
-    y_pred = clf.predict(X_test)
-
-    print(classification_report(y_test, y_pred))
+    print(clf.score(denselist[1500:2000], data['label'][1500:2000]))
 
 if __name__ == '__main__':
     to_tdidf()

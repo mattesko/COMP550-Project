@@ -4,10 +4,13 @@ data/metadata_dataframe.pkl
 data/articles_dataframe.pkl
 data/metadata_articles_dataframe.pkl
 data/train.zip
+data/train_articles/*.txt
 .idea/
 .vscode/
 __pycache__/preprocessing.cpython-36.pyc
-
+*.pkl
+*.csv
+*.zip
 
 ########### include the specific  files#######
 # use !file notation, space reserved
