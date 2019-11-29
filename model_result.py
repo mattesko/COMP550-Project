@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from sklearn.metrics import f1_score, confusion_matrix
+from sklearn.metrics import f1_score, confusion_matrix, accuracy_score, recall_score, precision_score
 
 from warnings import simplefilter
 simplefilter(action='ignore', category=FutureWarning)
@@ -19,7 +19,7 @@ data = pd.read_pickle(DATA_FILEPATH)
 
 X_test, y_test = data[data["fold"] == "test"].drop(columns="label"), data[data["fold"] == "test"]["label"]
 
-model_names = ["logistic_reg_preprocess", "SVM_preprocess", "NB_preprocess"]
+model_names = ["predictions_bilstm"]
 predictions = []
 
 for model_name in model_names:
@@ -33,3 +33,12 @@ for model_name in model_names:
     print(f1_score(y_test, loaded_pred, average=None))
     print("==========> Micro avg F1 score for model: " + model_name)
     print(f1_score(y_test, loaded_pred, average="micro"))
+    print("==========> Recall score by class for model: " + model_name)
+    print(recall_score(y_test, loaded_pred, average=None))
+    print("==========> Recall score total for model: " + model_name)
+    print(recall_score(y_test, loaded_pred, average="micro"))
+    print("==========> Precision score by class for model: " + model_name)
+    print(precision_score(y_test, loaded_pred, average=None))
+    print("==========> Precision score total for model: " + model_name)
+    print(precision_score(y_test, loaded_pred, average="micro"))
+
