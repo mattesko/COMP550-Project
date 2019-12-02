@@ -19,7 +19,7 @@ data = pd.read_pickle(DATA_FILEPATH)
 
 X_test, y_test = data[data["fold"] == "test"].drop(columns="label"), data[data["fold"] == "test"]["label"]
 
-model_names = ["predictions_bilstm"]
+model_names = ["predictions_bilstm_final_rebal"]
 predictions = []
 
 for model_name in model_names:
